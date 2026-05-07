@@ -33,7 +33,7 @@ export default async function handler(req, res) {
     const response = await fetch(url.toString(), {
       method: "GET",
       headers: {
-        "X-Postback-Secret": "bt_secret_123456"
+        "X-Postback-Secret": "8b245429d70a4de9b35272af91bb33b925f76d8e"
       }
     });
 
