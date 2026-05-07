@@ -27,8 +27,17 @@ export default async function handler(req, res) {
     const url = new URL("https://bitcotasks.com/track/postback.php");
 
     url.searchParams.append("click_id", tracking_id);
+
+    // Explicitly match Bitcotasks docs
+    url.searchParams.append("status", "approved");
+
+    // Your campaign event
     url.searchParams.append("event", "lead");
+
+    // Safe to keep for now (ignored on fixed payout campaigns)
     url.searchParams.append("payout", payout || "0");
+
+    console.log("Forwarding to Bitcotasks:", url.toString());
 
     const response = await fetch(url.toString(), {
       method: "GET",
@@ -39,6 +48,8 @@ export default async function handler(req, res) {
 
     const result = await response.text();
 
+    console.log("Bitcotasks response:", result);
+
     return res.status(200).json({
       success: true,
       forwarded: true,
@@ -46,7 +57,7 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error(err);
+    console.error("Server error:", err);
 
     return res.status(500).json({
       error: "Server error"
